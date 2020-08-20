@@ -12,23 +12,28 @@ struct SnakeGameView: View {
     @ObservedObject var game: SnakeGame
     
     var body: some View {
-        GeometryReader { geo in
+        let dragGesture = DragGesture().onEnded { value in
+            game.changeDirectionWithTranslation(value.translation)
+        }
+        
+        return GeometryReader { geo in
             ZStack(alignment: .topLeading) {
                 Color.red.opacity(0.3)
                 Rectangle()
-                    .fill(Color.blue)
+                    .fill(Color.green)
+                    .frame(width: game.bodyWidth, height: game.bodyWidth)
+                    .offset(x: game.foodPosition.x * game.bodyWidth,
+                            y: game.foodPosition.y * game.bodyWidth)
+                Rectangle()
+                    .fill(game.isGameOver ? Color.red : Color.blue)
                     .frame(width: game.bodyWidth, height: game.bodyWidth)
                     .offset(x: game.bodyPosition[0].x * game.bodyWidth,
                             y: game.bodyPosition[0].y * game.bodyWidth)
-                    .onTapGesture {
-                        print(game.bodyPosition[0])
-                        withAnimation() {
-                            game.addX()
-                        }
-                        
-                    }
-                
-                    
+            }.gesture(dragGesture)
+            .onAppear {
+                Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { _ in
+                    game.moveSnake()
+                }
             }
         }
     }
