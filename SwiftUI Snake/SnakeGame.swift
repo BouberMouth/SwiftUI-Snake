@@ -9,21 +9,21 @@ import SwiftUI
 
 class SnakeGame: ObservableObject {
     
+    let gameBoard: CGRect
     let bodyWidth: CGFloat
-    @Published var bodyPosition: [CGPoint]
-    @Published var foodPosition: CGPoint
-    let maxX: CGFloat
-    let maxY: CGFloat
+    @Published var bodyPosition: [Position]
+    @Published var foodPosition: Position
+    var maxX: CGFloat { return gameBoard.maxX - 1 }
+    var maxY: CGFloat { return gameBoard.maxY - 1 }
     var direction: Direction = .down
-    var isGameOver: Bool = false
+    @Published var isGameOver: Bool = false
     
     init(in rect: CGRect, bodyWidth: CGFloat) {
         self.bodyWidth = bodyWidth
-        self.maxX = (rect.maxX / bodyWidth).rounded()
-        self.maxY = (rect.maxY / bodyWidth).rounded()
-        self.bodyPosition = [SnakeGame.getRandomPositionIn(rect, forBodyWidth: bodyWidth)]
+        self.gameBoard = SnakeGame.findBestFittedBoardIn(rect, withBodyWidth: bodyWidth)
+        self.bodyPosition = [SnakeGame.getRandomPositionIn(gameBoard)]
         repeat {
-            self.foodPosition = SnakeGame.getRandomPositionIn(rect, forBodyWidth: bodyWidth)
+            self.foodPosition = SnakeGame.getRandomPositionIn(gameBoard)
         } while foodPosition == bodyPosition[0]
     }
     
@@ -50,31 +50,89 @@ class SnakeGame: ObservableObject {
         if !isGameOver {
             switch direction {
             case .up:
-                bodyPosition[0].y -= 1
+                if bodyPosition[0].point.y == 0 {
+                    isGameOver.toggle()
+                    print("GAMEOVER")
+                } else {
+                    for i in bodyPosition.reversedIndices() {
+                        if i != 0 {
+                            bodyPosition[i] = bodyPosition[i-1]
+                        } else {
+                            bodyPosition[i].point.y -= 1
+                        }
+                        
+                    }
+                }
             case .left:
-                bodyPosition[0].x -= 1
+                if bodyPosition[0].point.x == 0 {
+                    isGameOver.toggle()
+                    print("GAMEOVER")
+                } else {
+                    for i in bodyPosition.reversedIndices() {
+                        if i != 0 {
+                            bodyPosition[i] = bodyPosition[i-1]
+                        } else {
+                            bodyPosition[i].point.x -= 1
+                        }
+                    }
+                }
             case .down:
-                bodyPosition[0].y += 1
+                if bodyPosition[0].point.y == maxY {
+                    isGameOver.toggle()
+                    print("GAMEOVER")
+                } else {
+                    for i in bodyPosition.reversedIndices() {
+                        if i != 0 {
+                            bodyPosition[i] = bodyPosition[i-1]
+                        } else {
+                            bodyPosition[i].point.y += 1
+                        }
+                    }
+                }
             case .right:
-                bodyPosition[0].x += 1
+                if bodyPosition[0].point.x == maxX {
+                    isGameOver.toggle()
+                    print("GAMEOVER")
+                } else {
+                    for i in bodyPosition.reversedIndices() {
+                        if i != 0 {
+                            bodyPosition[i] = bodyPosition[i-1]
+                        } else {
+                            bodyPosition[i].point.x += 1
+                        }
+                    }
+                }
             }
             
             if foodPosition == bodyPosition[0] {
                 print("WON")
+                addToTail()
                 repeat {
-                    foodPosition = SnakeGame.getRandomPositionIn(CGRect(x: 0, y: 0, width: maxX, height: maxY), forBodyWidth: bodyWidth)
+                    foodPosition = SnakeGame.getRandomPositionIn(gameBoard)
                 } while foodPosition == bodyPosition[0]
-            }
-            
-            if bodyPosition[0].x < 0 || bodyPosition[0].x == maxX || bodyPosition[0].y < 0 || bodyPosition[0].y == maxY {
-                isGameOver.toggle()
-                print("GAMEOVER")
             }
         }
         
-        
-        
-        
+        print("BOARD -> \(gameBoard.maxX), \(gameBoard.maxY)")
+        print("FOOD -> \(foodPosition), SNAKE -> \(bodyPosition[0])\n")
+        print("GAME OVER ? -> \(isGameOver)")
+    }
+    
+    func addToTail() {
+        switch direction {
+        case .up:
+            bodyPosition.append(Position(point: CGPoint(x: bodyPosition.last!.point.x,
+                                                        y: bodyPosition.last!.point.y + 1)))
+        case .left:
+            bodyPosition.append(Position(point: CGPoint(x: bodyPosition.last!.point.x - 1,
+                                                        y: bodyPosition.last!.point.y)))
+        case .down:
+            bodyPosition.append(Position(point: CGPoint(x: bodyPosition.last!.point.x,
+                                                        y: bodyPosition.last!.point.y - 1)))
+        case .right:
+            bodyPosition.append(Position(point: CGPoint(x: bodyPosition.last!.point.x + 1,
+                                                        y: bodyPosition.last!.point.y)))
+        }
     }
     
     enum Direction {
@@ -84,16 +142,42 @@ class SnakeGame: ObservableObject {
         case right
     }
     
+    static func getRandomPositionIn(_ rect: CGRect) -> Position {
+        let x = CGFloat(Int(CGFloat.random(in: 0..<rect.maxX)))
+        let y = CGFloat(Int(CGFloat.random(in: 0..<rect.maxY)))
+        return Position(point: CGPoint(x: x, y: y))
+    }
     
-    
-    
-    
-    static func getRandomPositionIn(_ rect: CGRect, forBodyWidth bodyWidth: CGFloat) -> CGPoint {
-        let x = CGFloat.random(in: 0..<rect.maxX/bodyWidth).rounded()
-        let y = CGFloat.random(in: 0..<rect.maxY/bodyWidth).rounded()
-        return CGPoint(x: x, y: y)
-
+    static func findBestFittedBoardIn(_ rect: CGRect, withBodyWidth bodyWidth: CGFloat) -> CGRect {
+        let width = CGFloat(Int(rect.width / bodyWidth))
+        let height = CGFloat(Int(rect.height / bodyWidth))
+        return CGRect(x: 0,
+                      y: 0,
+                      width: width,
+                      height: height
+        )
     }
     
 }
 
+
+struct Position: Identifiable, Equatable {
+    
+    static func ==(lhs: Position, rhs: Position) -> Bool {
+        return lhs.point == rhs.point
+    }
+    
+    var id: UUID = UUID()
+    var point: CGPoint
+}
+
+
+extension Collection {
+    func reversedIndices() -> [Int] {
+        var arr = [Int]()
+        for i in 0..<count {
+            arr.append(i)
+        }
+        return arr.reversed()
+    }
+}

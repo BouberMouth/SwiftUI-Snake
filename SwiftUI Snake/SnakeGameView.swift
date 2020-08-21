@@ -22,17 +22,22 @@ struct SnakeGameView: View {
                 Rectangle()
                     .fill(Color.green)
                     .frame(width: game.bodyWidth, height: game.bodyWidth)
-                    .offset(x: game.foodPosition.x * game.bodyWidth,
-                            y: game.foodPosition.y * game.bodyWidth)
-                Rectangle()
-                    .fill(game.isGameOver ? Color.red : Color.blue)
-                    .frame(width: game.bodyWidth, height: game.bodyWidth)
-                    .offset(x: game.bodyPosition[0].x * game.bodyWidth,
-                            y: game.bodyPosition[0].y * game.bodyWidth)
-            }.gesture(dragGesture)
+                    .offset(x: game.foodPosition.point.x * game.bodyWidth,
+                            y: game.foodPosition.point.y * game.bodyWidth)
+                ForEach(game.bodyPosition) { position in
+                    Rectangle()
+                        .fill(game.isGameOver ? Color.red : Color.blue)
+                        .frame(width: game.bodyWidth, height: game.bodyWidth)
+                        .offset(x: position.point.x * game.bodyWidth,
+                                y: position.point.y * game.bodyWidth)
+                }
+            }.frame(width: game.gameBoard.width * game.bodyWidth, height: game.gameBoard.height * game.bodyWidth)
+            .gesture(dragGesture)
             .onAppear {
-                Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { _ in
-                    game.moveSnake()
+                Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                    withAnimation(.linear(duration: 1)) {
+                        game.moveSnake()
+                    }
                 }
             }
         }
