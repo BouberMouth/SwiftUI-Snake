@@ -143,9 +143,9 @@ class SnakeGame: ObservableObject {
     }
     
     static func getRandomPositionIn(_ rect: CGRect) -> Position {
-        let x = CGFloat(Int(CGFloat.random(in: 0..<rect.maxX)))
-        let y = CGFloat(Int(CGFloat.random(in: 0..<rect.maxY)))
-        return Position(point: CGPoint(x: x, y: y))
+        return Position(point: CGPoint(
+                            x: CGFloat(Int(CGFloat.random(in: 0..<rect.maxX))),
+                            y: CGFloat(Int(CGFloat.random(in: 0..<rect.maxY)))))
     }
     
     static func findBestFittedBoardIn(_ rect: CGRect, withBodyWidth bodyWidth: CGFloat) -> CGRect {
