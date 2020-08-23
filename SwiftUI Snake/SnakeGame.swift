@@ -11,8 +11,8 @@ class SnakeGame: ObservableObject {
     
     let gameBoard: CGRect
     let bodyWidth: CGFloat
-    @Published var bodyPosition: [Position]
-    @Published var foodPosition: Position
+    @Published var bodyPosition: [CGPoint]
+    @Published var foodPosition: CGPoint
     var maxX: CGFloat { return gameBoard.maxX - 1 }
     var maxY: CGFloat { return gameBoard.maxY - 1 }
     var direction: Direction = .down
@@ -46,11 +46,10 @@ class SnakeGame: ObservableObject {
     }
     
     func moveSnake() {
-        
         if !isGameOver {
             switch direction {
             case .up:
-                if bodyPosition[0].point.y == 0 {
+                if bodyPosition[0].y == 0 {
                     isGameOver.toggle()
                     print("GAMEOVER")
                 } else {
@@ -58,13 +57,13 @@ class SnakeGame: ObservableObject {
                         if i != 0 {
                             bodyPosition[i] = bodyPosition[i-1]
                         } else {
-                            bodyPosition[i].point.y -= 1
+                            bodyPosition[i].y -= 1
                         }
                         
                     }
                 }
             case .left:
-                if bodyPosition[0].point.x == 0 {
+                if bodyPosition[0].x == 0 {
                     isGameOver.toggle()
                     print("GAMEOVER")
                 } else {
@@ -72,12 +71,12 @@ class SnakeGame: ObservableObject {
                         if i != 0 {
                             bodyPosition[i] = bodyPosition[i-1]
                         } else {
-                            bodyPosition[i].point.x -= 1
+                            bodyPosition[i].x -= 1
                         }
                     }
                 }
             case .down:
-                if bodyPosition[0].point.y == maxY {
+                if bodyPosition[0].y == maxY {
                     isGameOver.toggle()
                     print("GAMEOVER")
                 } else {
@@ -85,12 +84,12 @@ class SnakeGame: ObservableObject {
                         if i != 0 {
                             bodyPosition[i] = bodyPosition[i-1]
                         } else {
-                            bodyPosition[i].point.y += 1
+                            bodyPosition[i].y += 1
                         }
                     }
                 }
             case .right:
-                if bodyPosition[0].point.x == maxX {
+                if bodyPosition[0].x == maxX {
                     isGameOver.toggle()
                     print("GAMEOVER")
                 } else {
@@ -98,7 +97,7 @@ class SnakeGame: ObservableObject {
                         if i != 0 {
                             bodyPosition[i] = bodyPosition[i-1]
                         } else {
-                            bodyPosition[i].point.x += 1
+                            bodyPosition[i].x += 1
                         }
                     }
                 }
@@ -121,17 +120,17 @@ class SnakeGame: ObservableObject {
     func addToTail() {
         switch direction {
         case .up:
-            bodyPosition.append(Position(point: CGPoint(x: bodyPosition.last!.point.x,
-                                                        y: bodyPosition.last!.point.y + 1)))
+            bodyPosition.append(CGPoint(x: bodyPosition.last!.x,
+                                        y: bodyPosition.last!.y + 1))
         case .left:
-            bodyPosition.append(Position(point: CGPoint(x: bodyPosition.last!.point.x - 1,
-                                                        y: bodyPosition.last!.point.y)))
+            bodyPosition.append(CGPoint(x: bodyPosition.last!.x - 1,
+                                        y: bodyPosition.last!.y))
         case .down:
-            bodyPosition.append(Position(point: CGPoint(x: bodyPosition.last!.point.x,
-                                                        y: bodyPosition.last!.point.y - 1)))
+            bodyPosition.append(CGPoint(x: bodyPosition.last!.x,
+                                        y: bodyPosition.last!.y - 1))
         case .right:
-            bodyPosition.append(Position(point: CGPoint(x: bodyPosition.last!.point.x + 1,
-                                                        y: bodyPosition.last!.point.y)))
+            bodyPosition.append(CGPoint(x: bodyPosition.last!.x + 1,
+                                                        y: bodyPosition.last!.y))
         }
     }
     
@@ -142,10 +141,9 @@ class SnakeGame: ObservableObject {
         case right
     }
     
-    static func getRandomPositionIn(_ rect: CGRect) -> Position {
-        return Position(point: CGPoint(
-                            x: CGFloat(Int(CGFloat.random(in: 0..<rect.maxX))),
-                            y: CGFloat(Int(CGFloat.random(in: 0..<rect.maxY)))))
+    static func getRandomPositionIn(_ rect: CGRect) -> CGPoint {
+        return CGPoint(x: CGFloat(Int(CGFloat.random(in: 0..<rect.maxX))),
+                       y: CGFloat(Int(CGFloat.random(in: 0..<rect.maxY))))
     }
     
     static func findBestFittedBoardIn(_ rect: CGRect, withBodyWidth bodyWidth: CGFloat) -> CGRect {
@@ -164,7 +162,7 @@ class SnakeGame: ObservableObject {
 struct Position: Identifiable, Equatable {
     
     static func ==(lhs: Position, rhs: Position) -> Bool {
-        return lhs.point == rhs.point
+        return lhs == rhs
     }
     
     var id: UUID = UUID()
