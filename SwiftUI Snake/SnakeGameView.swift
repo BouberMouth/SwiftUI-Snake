@@ -19,27 +19,52 @@ struct SnakeGameView: View {
         return GeometryReader { geo in
             ZStack(alignment: .topLeading) {
                 Color.red.opacity(0.3)
-                Rectangle()
-                    .fill(Color.green)
-                    .frame(width: game.bodyWidth, height: game.bodyWidth)
-                    .offset(x: game.foodPosition.x * game.bodyWidth,
+                ZStack {
+                    Rectangle().fill(Color.clear)
+                    Text("🍎")
+                }   .font(.system(size: game.bodyWidth * 0.7))
+                .frame(width: game.bodyWidth, height: game.bodyWidth)
+                .offset(x: game.foodPosition.x * game.bodyWidth,
                             y: game.foodPosition.y * game.bodyWidth)
                 ForEach(0..<game.bodyPosition.count, id: \.self) { i in
-                    Rectangle()
-                        .fill(game.isGameOver ? Color.red : Color.blue)
-                        .frame(width: game.bodyWidth, height: game.bodyWidth)
-                        .offset(x: game.bodyPosition[i].x * game.bodyWidth,
-                                y: game.bodyPosition[i].y * game.bodyWidth)
+                    if i == 0 {
+                        SnakeHead()
+                            .fill(game.isGameOver ? Color.red : Color.blue)
+                            .frame(width: game.bodyWidth, height: game.bodyWidth)
+                            .rotationEffect(rotationForSnakeHead())
+                            .offset(x: game.bodyPosition[i].x * game.bodyWidth,
+                                    y: game.bodyPosition[i].y * game.bodyWidth)
+                    } else {
+                        Rectangle()
+                            .fill(game.isGameOver ? Color.red : Color.blue)
+                            .frame(width: game.bodyWidth, height: game.bodyWidth)
+                            .offset(x: game.bodyPosition[i].x * game.bodyWidth,
+                                    y: game.bodyPosition[i].y * game.bodyWidth)
+                    }
+                    
                 }
             }.frame(width: game.gameBoard.width * game.bodyWidth, height: game.gameBoard.height * game.bodyWidth)
             .gesture(dragGesture)
             .onAppear {
-                Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+                Timer.scheduledTimer(withTimeInterval: 0.1*10, repeats: true) { _ in
                     withAnimation(.linear(duration: 0.1)) {
                         game.moveSnake()
                     }
                 }
             }
+        }
+    }
+    
+    func rotationForSnakeHead() -> Angle {
+        switch game.direction {
+        case .up:
+            return Angle(degrees: 0)
+        case .down:
+            return Angle(degrees: 180)
+        case .right:
+            return Angle(degrees: 90)
+        case .left:
+            return Angle(degrees: 270)
         }
     }
 }

@@ -12,8 +12,9 @@ struct ContentView: View {
         GeometryReader { geo in
             SnakeGameView(game: SnakeGame(
                             in: CGRect(x: 0, y: 0, width: geo.size.width, height: geo.size.height),
-                            bodyWidth: min(geo.size.width, geo.size.height)/30))
+                            bodyWidth: min(geo.size.width, geo.size.height)/5))
         }
+        //SnakeHead().aspectRatio(1, contentMode: .fit)
     }
 }
 

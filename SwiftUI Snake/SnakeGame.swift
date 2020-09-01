@@ -58,6 +58,9 @@ class SnakeGame: ObservableObject {
                             bodyPosition[i] = bodyPosition[i-1]
                         } else {
                             bodyPosition[i].y -= 1
+                            if bodyPosition[1..<bodyPosition.count].contains(bodyPosition[0]) {
+                                isGameOver.toggle()
+                            }
                         }
                         
                     }
@@ -72,6 +75,9 @@ class SnakeGame: ObservableObject {
                             bodyPosition[i] = bodyPosition[i-1]
                         } else {
                             bodyPosition[i].x -= 1
+                            if bodyPosition[1..<bodyPosition.count].contains(bodyPosition[0]) {
+                                isGameOver.toggle()
+                            }
                         }
                     }
                 }
@@ -85,6 +91,9 @@ class SnakeGame: ObservableObject {
                             bodyPosition[i] = bodyPosition[i-1]
                         } else {
                             bodyPosition[i].y += 1
+                            if bodyPosition[1..<bodyPosition.count].contains(bodyPosition[0]) {
+                                isGameOver.toggle()
+                            }
                         }
                     }
                 }
@@ -98,6 +107,9 @@ class SnakeGame: ObservableObject {
                             bodyPosition[i] = bodyPosition[i-1]
                         } else {
                             bodyPosition[i].x += 1
+                            if bodyPosition[1..<bodyPosition.count].contains(bodyPosition[0]) {
+                                isGameOver.toggle()
+                            }
                         }
                     }
                 }
@@ -112,9 +124,9 @@ class SnakeGame: ObservableObject {
             }
         }
         
-        print("BOARD -> \(gameBoard.maxX), \(gameBoard.maxY)")
-        print("FOOD -> \(foodPosition), SNAKE -> \(bodyPosition[0])\n")
-        print("GAME OVER ? -> \(isGameOver)")
+//        print("BOARD -> \(gameBoard.maxX), \(gameBoard.maxY)")
+//        print("FOOD -> \(foodPosition), SNAKE -> \(bodyPosition[0])\n")
+//        print("GAME OVER ? -> \(isGameOver)")
     }
     
     func addToTail() {

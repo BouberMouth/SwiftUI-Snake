@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		713B9ADC24FE7D6D00AC2415 /* SnakeHead.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713B9ADB24FE7D6D00AC2415 /* SnakeHead.swift */; };
 		71F6C96E24ED564500EAB375 /* SwiftUI_SnakeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F6C96D24ED564500EAB375 /* SwiftUI_SnakeApp.swift */; };
 		71F6C97024ED564500EAB375 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F6C96F24ED564500EAB375 /* ContentView.swift */; };
 		71F6C97224ED564A00EAB375 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71F6C97124ED564A00EAB375 /* Assets.xcassets */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		713B9ADB24FE7D6D00AC2415 /* SnakeHead.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnakeHead.swift; sourceTree = "<group>"; };
 		71F6C96A24ED564500EAB375 /* SwiftUI Snake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI Snake.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		71F6C96D24ED564500EAB375 /* SwiftUI_SnakeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_SnakeApp.swift; sourceTree = "<group>"; };
 		71F6C96F24ED564500EAB375 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 				71F6C96D24ED564500EAB375 /* SwiftUI_SnakeApp.swift */,
 				71F6C96F24ED564500EAB375 /* ContentView.swift */,
 				71F6C97C24ED580900EAB375 /* SnakeGameView.swift */,
+				713B9ADB24FE7D6D00AC2415 /* SnakeHead.swift */,
 				71F6C97E24ED581C00EAB375 /* SnakeGame.swift */,
 				71F6C97124ED564A00EAB375 /* Assets.xcassets */,
 				71F6C97624ED564A00EAB375 /* Info.plist */,
@@ -144,6 +147,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				713B9ADC24FE7D6D00AC2415 /* SnakeHead.swift in Sources */,
 				71F6C97024ED564500EAB375 /* ContentView.swift in Sources */,
 				71F6C96E24ED564500EAB375 /* SwiftUI_SnakeApp.swift in Sources */,
 				71F6C97F24ED581C00EAB375 /* SnakeGame.swift in Sources */,
