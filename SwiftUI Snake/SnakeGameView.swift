@@ -35,7 +35,7 @@ struct SnakeGameView: View {
                             .offset(x: game.bodyPosition[i].x * game.bodyWidth,
                                     y: game.bodyPosition[i].y * game.bodyWidth)
                     } else {
-                        Rectangle()
+                        Circle()
                             .fill(game.isGameOver ? Color.red : Color.blue)
                             .frame(width: game.bodyWidth, height: game.bodyWidth)
                             .offset(x: game.bodyPosition[i].x * game.bodyWidth,
@@ -47,7 +47,7 @@ struct SnakeGameView: View {
             .gesture(dragGesture)
             .onAppear {
                 Timer.scheduledTimer(withTimeInterval: 0.1*10, repeats: true) { _ in
-                    withAnimation(.linear(duration: 0.1)) {
+                    withAnimation(.linear(duration: 0.1*10)) {
                         game.moveSnake()
                     }
                 }
