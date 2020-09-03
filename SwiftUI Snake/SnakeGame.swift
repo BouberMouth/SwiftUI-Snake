@@ -117,7 +117,8 @@ class SnakeGame: ObservableObject {
             
             if foodPosition == bodyPosition[0] {
                 print("WON")
-                addToTail()
+                bodyPosition.append(bodyPosition[0])
+                //addToTail()
                 repeat {
                     foodPosition = SnakeGame.getRandomPositionIn(gameBoard)
                 } while foodPosition == bodyPosition[0]
@@ -166,6 +167,14 @@ class SnakeGame: ObservableObject {
                       width: width,
                       height: height
         )
+    }
+    
+    func reset() {
+        bodyPosition = [SnakeGame.getRandomPositionIn(gameBoard)]
+        repeat {
+            self.foodPosition = SnakeGame.getRandomPositionIn(gameBoard)
+        } while foodPosition == bodyPosition[0]
+        isGameOver = false
     }
     
 }
