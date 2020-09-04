@@ -17,48 +17,51 @@ struct SnakeGameView: View {
         }
         
         return GeometryReader { geo in
-            ZStack(alignment: .topLeading) {
-                Color.red.opacity(0.3)
-                ZStack {
-                    Rectangle().fill(Color.clear)
-                    Text("🍎")
-                }   .font(.system(size: game.bodyWidth * 0.7))
-                .frame(width: game.bodyWidth, height: game.bodyWidth)
-                .offset(x: game.foodPosition.x * game.bodyWidth,
-                            y: game.foodPosition.y * game.bodyWidth)
-                
-                ForEach(0..<game.bodyPosition.count, id: \.self) { i in
-                    if i == -1 {
-                        SnakeHead()
-                            .fill(game.isGameOver ? Color.red : Color.blue)
-                            .frame(width: game.bodyWidth, height: game.bodyWidth)
-                            .rotationEffect(rotationForSnakeHead())
-                            .offset(x: game.bodyPosition[i].x * game.bodyWidth,
-                                    y: game.bodyPosition[i].y * game.bodyWidth)
-                            
-                    } else {
-                        Circle()
-                            .fill(game.isGameOver ? Color.red : Color.blue)
-                            .frame(width: game.bodyWidth, height: game.bodyWidth)
-                            .offset(x: game.bodyPosition[i].x * game.bodyWidth,
-                                    y: game.bodyPosition[i].y * game.bodyWidth)
+            VStack {
+                Text("SCORE: \(game.bodyPosition.count - 1)")
+                ZStack(alignment: .topLeading) {
+                    Color.red.opacity(0.3)
+                    ZStack {
+                        Rectangle().fill(Color.clear)
+                        Text("🍎")
+                    }   .font(.system(size: game.bodyWidth * 0.7))
+                    .frame(width: game.bodyWidth, height: game.bodyWidth)
+                    .offset(x: game.foodPosition.x * game.bodyWidth,
+                                y: game.foodPosition.y * game.bodyWidth)
+                    
+                    ForEach(0..<game.bodyPosition.count, id: \.self) { i in
+                        if i == -1 {
+                            SnakeHead()
+                                .fill(game.isGameOver ? Color.red : Color.blue)
+                                .frame(width: game.bodyWidth, height: game.bodyWidth)
+                                .rotationEffect(rotationForSnakeHead())
+                                .offset(x: game.bodyPosition[i].x * game.bodyWidth,
+                                        y: game.bodyPosition[i].y * game.bodyWidth)
+                                
+                        } else {
+                            Circle()
+                                .fill(game.isGameOver ? Color.red : Color.blue)
+                                .frame(width: game.bodyWidth, height: game.bodyWidth)
+                                .offset(x: game.bodyPosition[i].x * game.bodyWidth,
+                                        y: game.bodyPosition[i].y * game.bodyWidth)
+                        }
+                        
                     }
                     
+                    if game.isGameOver {
+                        Text("GAME OVER: 3 TAPS TO RESTART")
+                    }
                 }
-                
-                if game.isGameOver {
-                    Text("GAME OVER: 3 TAPS TO RESTART")
-                }
-            }
-            .frame(width: game.gameBoard.width * game.bodyWidth, height: game.gameBoard.height * game.bodyWidth)
-            .gesture(dragGesture)
-            .onTapGesture(count: 3, perform: {
-                game.reset()
-            })
-            .onAppear {
-                Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
-                    withAnimation(.linear(duration: 0.1)) {
-                        game.moveSnake()
+                .frame(width: game.gameBoard.width * game.bodyWidth, height: game.gameBoard.height * game.bodyWidth)
+                .gesture(dragGesture)
+                .onTapGesture(count: 3, perform: {
+                    game.reset()
+                })
+                .onAppear {
+                    Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+                        withAnimation(.linear(duration: 0.1)) {
+                            game.moveSnake()
+                        }
                     }
                 }
             }
