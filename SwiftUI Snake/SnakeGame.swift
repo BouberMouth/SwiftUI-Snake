@@ -149,7 +149,19 @@ class SnakeGame: ObservableObject {
         }
     }
     
+    var audioPlayer: AVAudioPlayer?
     func playSound() {
+        if let path = Bundle.main.path(forResource: "snakehit", ofType: "mp3") {
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: path))
+                audioPlayer?.play()
+            } catch {
+                print("ERRRRRRRRROR: \(error)")
+            }
+        }
+    }
+    
+    func playSound1() {
         guard let url = Bundle.main.url(forResource: "snakehit", withExtension: "mp3") else { return }
 
         do {
