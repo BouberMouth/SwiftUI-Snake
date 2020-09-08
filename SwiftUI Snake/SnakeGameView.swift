@@ -24,7 +24,7 @@ struct SnakeGameView: View {
                     Color.red.opacity(0.3)
                     ZStack {
                         Rectangle().fill(Color.clear)
-                        Text("🍎")
+                        Text("🐁")
                     }   .font(.system(size: game.bodyWidth * 0.7))
                     .frame(width: game.bodyWidth, height: game.bodyWidth)
                     .offset(x: game.foodPosition.x * game.bodyWidth,

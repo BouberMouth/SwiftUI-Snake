@@ -18,8 +18,7 @@ class SnakeGame: ObservableObject {
     var maxY: CGFloat { return gameBoard.maxY - 1 }
     var direction: Direction = .down
     @Published var isGameOver: Bool = false
-    var player: AVAudioPlayer?
-    
+
     init(in rect: CGRect, bodyWidth: CGFloat) {
         self.bodyWidth = bodyWidth
         self.gameBoard = SnakeGame.findBestFittedBoardIn(rect, withBodyWidth: bodyWidth)
@@ -118,68 +117,28 @@ class SnakeGame: ObservableObject {
             }
             
             if foodPosition == bodyPosition[0] {
-                playSound()
+                playSound(fileName: "snakehit", withExtension: "mp3")
                 bodyPosition.append(bodyPosition[0])
-                //addToTail()
                 repeat {
                     foodPosition = SnakeGame.getRandomPositionIn(gameBoard)
                 } while foodPosition == bodyPosition[0]
             }
         }
-        
-//        print("BOARD -> \(gameBoard.maxX), \(gameBoard.maxY)")
-//        print("FOOD -> \(foodPosition), SNAKE -> \(bodyPosition[0])\n")
-//        print("GAME OVER ? -> \(isGameOver)")
     }
-    
-    func addToTail() {
-        switch direction {
-        case .up:
-            bodyPosition.append(CGPoint(x: bodyPosition.last!.x,
-                                        y: bodyPosition.last!.y + 1))
-        case .left:
-            bodyPosition.append(CGPoint(x: bodyPosition.last!.x - 1,
-                                        y: bodyPosition.last!.y))
-        case .down:
-            bodyPosition.append(CGPoint(x: bodyPosition.last!.x,
-                                        y: bodyPosition.last!.y - 1))
-        case .right:
-            bodyPosition.append(CGPoint(x: bodyPosition.last!.x + 1,
-                                                        y: bodyPosition.last!.y))
-        }
-    }
+
     
     var audioPlayer: AVAudioPlayer?
-    func playSound() {
-        if let path = Bundle.main.path(forResource: "snakehit", ofType: "mp3") {
+    func playSound(fileName: String, withExtension fileExtension: String) {
+        if let path = Bundle.main.path(forResource: fileName, ofType: fileExtension) {
             do {
                 audioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: path))
+                audioPlayer?.setVolume(0.1, fadeDuration: 0.2)
                 audioPlayer?.play()
             } catch {
                 print("ERRRRRRRRROR: \(error)")
             }
-        }
-    }
-    
-    func playSound1() {
-        guard let url = Bundle.main.url(forResource: "snakehit", withExtension: "mp3") else { return }
-
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-            try AVAudioSession.sharedInstance().setActive(true)
-
-            /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
-            player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.mp3.rawValue)
-
-            /* iOS 10 and earlier require the following line:
-            player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
-
-            guard let player = player else { return }
-
-            player.play()
-
-        } catch let error {
-            print(error.localizedDescription)
+        } else {
+            print("ERROR: Unable to find the file to play")
         }
     }
     
