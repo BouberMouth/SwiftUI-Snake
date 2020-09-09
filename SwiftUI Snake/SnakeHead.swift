@@ -26,8 +26,6 @@ struct SnakeHead: Shape {
         ])
         p.addArc(center: center, radius: rect.height/2, startAngle: Angle(degrees: 0), endAngle: Angle(degrees: 180), clockwise: true)
         
-        
-        
         return p
     }
 }

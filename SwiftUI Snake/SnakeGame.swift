@@ -138,7 +138,7 @@ class SnakeGame: ObservableObject {
                 print("ERRRRRRRRROR: \(error)")
             }
         } else {
-            print("ERROR: Unable to find the file to play")
+            print("ERROR: Unable to find the file \(fileName).\(fileExtension)")
         }
     }
     
