@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AVFoundation
+import Speech
 
 class SnakeGame: ObservableObject {
     
@@ -14,6 +15,8 @@ class SnakeGame: ObservableObject {
     let bodyWidth: CGFloat
     @Published var bodyPosition: [CGPoint]
     @Published var foodPosition: CGPoint
+    @Published var poisonPosition: CGPoint?
+    var poisonCounter: Int = 3
     var maxX: CGFloat { return gameBoard.maxX - 1 }
     var maxY: CGFloat { return gameBoard.maxY - 1 }
     var direction: Direction = .down
@@ -121,25 +124,50 @@ class SnakeGame: ObservableObject {
                 bodyPosition.append(bodyPosition[0])
                 repeat {
                     foodPosition = SnakeGame.getRandomPositionIn(gameBoard)
-                } while foodPosition == bodyPosition[0]
+                } while bodyPosition.contains(foodPosition)
+                
+                if poisonPosition != nil {
+                    poisonPosition = nil
+                    poisonCounter = Int.random(in: 2..<5)
+                } else {
+                    poisonCounter -= 1
+                }
+                
+                if poisonCounter == 0 {
+                    repeat {
+                        poisonPosition = SnakeGame.getRandomPositionIn(gameBoard)
+                    } while bodyPosition.contains(poisonPosition!) || poisonPosition! == foodPosition
+                }
             }
+            
+            if bodyPosition[0] == poisonPosition {
+                print("DEAD BY BOMB")
+                isGameOver = true
+            }
+            
+            
         }
     }
 
     
     var audioPlayer: AVAudioPlayer?
     func playSound(fileName: String, withExtension fileExtension: String) {
+        #if targetEnvironment(simulator)
+        print("Unable to play sound with app running on the simulator")
+        return
+        #else
         if let path = Bundle.main.path(forResource: fileName, ofType: fileExtension) {
             do {
                 audioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: path))
                 audioPlayer?.setVolume(0.1, fadeDuration: 0.2)
                 audioPlayer?.play()
             } catch {
-                print("ERRRRRRRRROR: \(error)")
+                print("Unable to play \(fileName).\(fileExtension). ERROR: \(error)")
             }
         } else {
             print("ERROR: Unable to find the file \(fileName).\(fileExtension)")
         }
+        #endif
     }
     
     enum Direction {

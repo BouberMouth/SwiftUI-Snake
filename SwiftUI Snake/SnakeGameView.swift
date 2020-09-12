@@ -30,6 +30,16 @@ struct SnakeGameView: View {
                     .offset(x: game.foodPosition.x * game.bodyWidth,
                                 y: game.foodPosition.y * game.bodyWidth)
                     
+                    if game.poisonPosition != nil {
+                        ZStack {
+                            Rectangle().fill(Color.clear)
+                            Text("💣")
+                        }   .font(.system(size: game.bodyWidth * 0.7))
+                        .frame(width: game.bodyWidth, height: game.bodyWidth)
+                        .offset(x: game.poisonPosition!.x * game.bodyWidth,
+                                    y: game.poisonPosition!.y * game.bodyWidth)
+                    }
+                    
                     ForEach(0..<game.bodyPosition.count, id: \.self) { i in
                         if i == -1 {
                             SnakeHead()
