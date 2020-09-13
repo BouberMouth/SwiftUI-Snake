@@ -63,7 +63,16 @@ class SnakeGame: ObservableObject {
                         } else {
                             bodyPosition[i].y -= 1
                             if bodyPosition[1..<bodyPosition.count].contains(bodyPosition[0]) {
-                                isGameOver.toggle()
+                                //isGameOver.toggle()
+                                //_____________________________________BUG TO FIX
+                                var indexOfHit = 0
+                                for point in bodyPosition[1..<bodyPosition.count] {
+                                    if point == bodyPosition[0] {
+                                        indexOfHit = bodyPosition.firstIndex(of: point)!
+                                    }
+                                }
+                                bodyPosition.removeSubrange(indexOfHit..<bodyPosition.count)
+                                //_______________________________
                             }
                         }
                         
