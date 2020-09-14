@@ -65,10 +65,11 @@ class SnakeGame: ObservableObject {
                             if bodyPosition[1..<bodyPosition.count].contains(bodyPosition[0]) {
                                 //isGameOver.toggle()
                                 //_____________________________________BUG TO FIX
-                                var indexOfHit = 0
+                                var indexOfHit = 3
                                 for point in bodyPosition[1..<bodyPosition.count] {
-                                    if point == bodyPosition[0] {
+                                    if point.x == bodyPosition[0].x && point.y == bodyPosition[0].y {
                                         indexOfHit = bodyPosition.firstIndex(of: point)!
+                                        print("HIT: \(indexOfHit)")
                                     }
                                 }
                                 bodyPosition.removeSubrange(indexOfHit..<bodyPosition.count)
@@ -128,6 +129,7 @@ class SnakeGame: ObservableObject {
                 }
             }
             
+            print(bodyPosition.count)
             if foodPosition == bodyPosition[0] {
                 playSound(fileName: "snakehit", withExtension: "mp3")
                 bodyPosition.append(bodyPosition[0])
