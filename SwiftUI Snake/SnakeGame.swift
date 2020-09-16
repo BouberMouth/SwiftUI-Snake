@@ -63,8 +63,8 @@ class SnakeGame: ObservableObject {
                         } else {
                             bodyPosition[i].y -= 1
                             if bodyPosition[1..<bodyPosition.count].contains(bodyPosition[0]) {
-                                //isGameOver.toggle()
-                                //_____________________________________BUG TO FIX
+                                isGameOver.toggle()
+                                /*/_____________________________________BUG TO FIX
                                 var indexOfHit = 3
                                 for point in bodyPosition[1..<bodyPosition.count] {
                                     if point.x == bodyPosition[0].x && point.y == bodyPosition[0].y {
@@ -73,7 +73,7 @@ class SnakeGame: ObservableObject {
                                     }
                                 }
                                 bodyPosition.removeSubrange(indexOfHit..<bodyPosition.count)
-                                //_______________________________
+                                *///_______________________________
                             }
                         }
                         
