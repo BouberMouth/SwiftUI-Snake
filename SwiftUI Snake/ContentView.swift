@@ -11,9 +11,7 @@ struct ContentView: View {
     
     var body: some View {
         GeometryReader { geo in
-            SnakeGameView(game: SnakeGame(
-                            in: CGRect(x: 0, y: 0, width: geo.size.width, height: geo.size.height),
-                            bodyWidth: min(geo.size.width, geo.size.height)/15))
+            SnakeGameView2()
         }
     }
 }
