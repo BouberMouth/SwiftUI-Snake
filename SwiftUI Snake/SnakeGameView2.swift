@@ -26,11 +26,17 @@ struct SnakeGameView2: View {
                         isGamePaused.toggle()
                         print("PAUSE")
                     }
+                    .padding()
+                    .background(Color.red)
+                    .cornerRadius(5)
                     
                     if isGamePaused {
                         Button("Restart") {
                             print("RESTART")
                         }
+                        .padding()
+                        .background(Color.red)
+                        .cornerRadius(5)
                     }
                 }.frame(height: 50)
             }
