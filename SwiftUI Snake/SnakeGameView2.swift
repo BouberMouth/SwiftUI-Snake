@@ -11,6 +11,10 @@ struct SnakeGameView2: View {
     
     let bgColor = Color(UIColor(displayP3Red: 158/255, green: 205/255, blue: 156/255, alpha: 1))
     @State var isGamePaused = false
+    @State var isGameOver = false
+    @State var direction = Direction.right
+    @State var bodyPositions: [CGPoint] = [CGPoint(x: 0, y: 0)]
+    let snakeSize = 20
     
     var body: some View {
         GeometryReader { geo in
@@ -57,6 +61,13 @@ struct SnakeGameView2: View {
         let gameHeight = CGFloat(numberOfRow) * cellSize
         
         return gameHeight
+    }
+    
+    enum Direction: CaseIterable {
+        case up
+        case left
+        case down
+        case right
     }
 }
 
